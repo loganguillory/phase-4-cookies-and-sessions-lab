@@ -7,9 +7,19 @@ class ArticlesController < ApplicationController
   end
 
   def show
+    # initialize session variable
+    session[:page_views] ||= 0
+    # Adds 1 each time an article is accessed
+    session[:page_views] += 1
+    #conditional logic that stops user from seeing more than 3 articles
+    if session[:page_views] > 3
+      render json: {"error": "Maximum pageview limit reached"}, status: :unauthorized
+    else
     article = Article.find(params[:id])
     render json: article
+    
   end
+end
 
   private
 
